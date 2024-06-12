@@ -89,7 +89,7 @@ npm start
 - ***ProtectedRoute:*** A component that checks for a valid JWT token before allowing access to protected routes.
 - ***Wellcome:*** A sample protected component that is only accessible to authenticated users.
 
-Key files and Directories
+#### Key files and Directories
 
 ```java
 client/
@@ -118,7 +118,8 @@ The server side of this project is built using Node.js and Express.js to handle 
 - ***authRoutes.js:*** Defines the routes for user registration, login, and protected routes.
 - ***db.js:*** Configures the connection to the MongoDB database.
 
-Key Files and Directories
+
+#### Key Files and Directories
 
 ```java
 server/
