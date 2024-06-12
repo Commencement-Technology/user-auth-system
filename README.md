@@ -30,13 +30,13 @@
 1. Clone the repository
 
   ```bash
-  git clone https://gitlab.com/cobanalitalha/authentication-system.git
+  git clone https://github.com/carpodok/user-auth-system.git
   ```
 
 2. Navigate to the project directory:
 
  ```bash
-  git clone https://gitlab.com/cobanalitalha/authentication-system.git
+  cd authentication-system
   ```
 3. Install dependencies for both server and client:
 
