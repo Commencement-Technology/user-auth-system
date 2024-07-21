@@ -3,14 +3,46 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import authService from "../services/authService";
 
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import keyImage from "../assets/login_image.jpg";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let isValid = true;
+
+    if (email === "") {
+      setEmailError(true);
+      isValid = false;
+    } else {
+      setEmailError(false);
+    }
+
+    if (password === "") {
+      setPasswordError(true);
+      isValid = false;
+    } else {
+      setPasswordError(false);
+    }
+
+    if (!isValid) {
+      setError("Both email and password are required");
+      return;
+    } else {
+      setError("");
+    }
+
     try {
       const response = await authService.login(email, password);
       const token = response.token;
@@ -20,7 +52,7 @@ const Login = () => {
       Cookies.set("user", JSON.stringify(user));
       navigate("/welcome");
     } catch (err) {
-      setError("Invalid credentials:");
+      setError("Invalid credentials");
     }
   };
 
@@ -32,77 +64,162 @@ const Login = () => {
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         height: "100vh",
+        width: "100%",
       }}
     >
       <div
         style={{
-          width: "300px",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "10px",
-          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          flex: 1,
           display: "flex",
-          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <h2 style={{ textAlign: "center" }}>Login</h2>
-        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-          <div style={{ marginBottom: "15px" }}>
-            <label>Email:</label>
-            <input
-              type="email"
+        <img src={keyImage} alt="Key" style={{ height: "500px" }} />
+      </div>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: 300,
+            padding: 2,
+            borderRadius: 1,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography variant="h4" sx={{ opacity: 0.9, color: "#5862F5" }}>
+            Welcome Back!
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ opacity: 0.6, color: "#5862F5" }}
+          >
+            Please login to continue
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              textAlign: "center",
+              marginBottom: 2,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Email"
+              id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError(false);
+                setError("");
+              }}
+              margin="normal"
+              error={emailError}
+              helperText={emailError ? "Email is required" : ""}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#5862F5",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  opacity: 0.8,
+                },
+                "& label.Mui-focused": {
+                  color: "#5862F5",
+                  opacity: 0.8,
+                },
+              }}
             />
-          </div>
-          <div style={{ marginBottom: "15px" }}>
-            <label>Password:</label>
-            <input
+            <TextField
+              fullWidth
+              label="Password"
+              id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError(false);
+                setError("");
+              }}
+              margin="normal"
+              error={passwordError}
+              helperText={passwordError ? "Password is required" : ""}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#5862F5",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  opacity: 0.8,
+                },
+                "& label.Mui-focused": {
+                  color: "#5862F5",
+                  opacity: 0.8,
+                },
+              }}
             />
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#5862F5",
+                color: "white",
+                marginTop: 2,
+                "&:hover": {
+                  backgroundColor: "#4B4DF7",
+                },
+              }}
+            >
+              Login
+            </Button>
+          </Box>
+          {error && (
+            <Typography color="error" sx={{ textAlign: "center" }}>
+              {error}
+            </Typography>
+          )}
+          <div style={{ marginTop: "10px", textAlign: "center" }}>
+            <Typography
+              variant="body2"
+              sx={{
+                opacity: 0.9,
+                color: "#808080",
+              }}
+            >
+              Don't have an account?{" "}
+              <Button
+                onClick={handleRegister}
+                sx={{
+                  background: "none",
+                  border: "none",
+                  color: "#7D97F4",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  "&:hover": {
+                    color: "#4B4DF7",
+                    background: "none",
+                  },
+                }}
+              >
+                Sign up
+              </Button>
+            </Typography>
           </div>
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "10px",
-              backgroundColor: "#007BFF",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Login
-          </button>
-        </form>
-        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-        <div style={{ marginTop: "10px", textAlign: "center" }}>
-          <span>Don't have an account? </span>
-          <button
-            onClick={handleRegister}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#007BFF",
-              textDecoration: "underline",
-              cursor: "pointer",
-              padding: "0",
-            }}
-          >
-            Sign up
-          </button>
-        </div>
+        </Box>
       </div>
     </div>
   );
