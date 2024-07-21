@@ -82,6 +82,13 @@ npm start
 
 ## Client Side Details
 
+![login_page](https://github.com/user-attachments/assets/fae5b3bf-18c8-4cbd-b76a-e7d13012cfa0)
+
+
+![register_page](https://github.com/user-attachments/assets/f6962cb0-f37e-4809-8378-43c6d55018f8)
+
+
+
    The client side of this project is built using React.js to provide a seamless user experience. Here are some key components and their functionalities:
 
 - ***Register:*** A form to register a new user. It collects the user's email and password and sends a POST request to the /api/register endpoint.
