@@ -1,23 +1,64 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import authService from "../services/authService";
+
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import keyImage from "../assets/register_image.jpg";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [usernameError, setUsernameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let isValid = true;
+
+    if (username === "") {
+      setUsernameError(true);
+      isValid = false;
+    } else {
+      setUsernameError(false);
+    }
+
+    if (email === "") {
+      setEmailError(true);
+      isValid = false;
+    } else {
+      setEmailError(false);
+    }
+
+    if (password === "") {
+      setPasswordError(true);
+      isValid = false;
+    } else {
+      setPasswordError(false);
+    }
+
+    if (!isValid) {
+      setError("All fields are required");
+      return;
+    } else {
+      setError("");
+    }
+
     try {
       const response = await authService.register(username, email, password);
       const token = response.token;
-      localStorage.setItem("token", token);
+      Cookies.set("authToken", token);
       const userResponse = await authService.getUser(token);
       const user = userResponse.user;
-      localStorage.setItem("user", JSON.stringify(user));
+      Cookies.set("user", JSON.stringify(user));
       navigate("/login");
     } catch (err) {
       setError("Error during registration");
@@ -32,88 +73,190 @@ const Register = () => {
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         height: "100vh",
+        width: "100%",
       }}
     >
       <div
         style={{
-          width: "300px",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "10px",
-          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          flex: 1,
           display: "flex",
-          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <h2 style={{ textAlign: "center" }}>Register</h2>
-        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-          <div style={{ marginBottom: "15px" }}>
-            <label>Name:</label>
-            <input
-              type="text"
+        <img src={keyImage} alt="Key" style={{ height: "500px" }} />
+      </div>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: 300,
+            padding: 2,
+            borderRadius: 1,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography variant="h4" sx={{ opacity: 0.9, color: "#5862F5" }}>
+            Join Us!
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ opacity: 0.6, color: "#5862F5" }}
+          >
+            Please fill in the form to create an account
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              textAlign: "center",
+              marginBottom: 2,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Name"
+              id="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setUsernameError(false);
+                setError("");
+              }}
+              margin="normal"
+              error={usernameError}
+              helperText={usernameError ? "Name is required" : ""}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#5862F5",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  opacity: 0.8,
+                },
+                "& label.Mui-focused": {
+                  color: "#5862F5",
+                  opacity: 0.8,
+                },
+              }}
             />
-          </div>
-          <div style={{ marginBottom: "15px" }}>
-            <label>Email:</label>
-            <input
-              type="email"
+            <TextField
+              fullWidth
+              label="Email"
+              id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError(false);
+                setError("");
+              }}
+              margin="normal"
+              error={emailError}
+              helperText={emailError ? "Email is required" : ""}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#5862F5",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  opacity: 0.8,
+                },
+                "& label.Mui-focused": {
+                  color: "#5862F5",
+                  opacity: 0.8,
+                },
+              }}
             />
-          </div>
-          <div style={{ marginBottom: "15px" }}>
-            <label>Password:</label>
-            <input
+            <TextField
+              fullWidth
+              label="Password"
+              id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError(false);
+                setError("");
+              }}
+              margin="normal"
+              error={passwordError}
+              helperText={passwordError ? "Password is required" : ""}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#5862F5",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  opacity: 0.8,
+                },
+                "& label.Mui-focused": {
+                  color: "#5862F5",
+                  opacity: 0.8,
+                },
+              }}
             />
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#5862F5",
+                color: "white",
+                marginTop: 2,
+                "&:hover": {
+                  backgroundColor: "#4B4DF7",
+                },
+              }}
+            >
+              Register
+            </Button>
+          </Box>
+          {error && (
+            <Typography color="error" sx={{ textAlign: "center" }}>
+              {error}
+            </Typography>
+          )}
+          <div style={{ marginTop: "10px", textAlign: "center" }}>
+            <Typography
+              variant="body2"
+              sx={{
+                opacity: 0.9,
+                color: "#808080",
+              }}
+            >
+              Already have an account?{" "}
+              <Button
+                onClick={handleLogin}
+                sx={{
+                  background: "none",
+                  border: "none",
+                  color: "#7D97F4",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  "&:hover": {
+                    color: "#4B4DF7",
+                    background: "none",
+                  },
+                }}
+              >
+                Login
+              </Button>
+            </Typography>
           </div>
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "10px",
-              backgroundColor: "#007BFF",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Register
-          </button>
-        </form>
-        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-        <div style={{ marginTop: "10px", textAlign: "center" }}>
-          <span>Already have an account? </span>
-          <button
-            onClick={handleLogin}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#007BFF",
-              textDecoration: "underline",
-              cursor: "pointer",
-              padding: "0",
-              fontSize: "inherit",
-            }}
-          >
-            Login
-          </button>
-        </div>
+        </Box>
       </div>
     </div>
   );

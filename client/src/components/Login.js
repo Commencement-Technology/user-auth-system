@@ -102,7 +102,7 @@ const Login = () => {
             variant="subtitle1"
             sx={{ opacity: 0.6, color: "#5862F5" }}
           >
-            Please login to continue
+            Login to continue where you left off
           </Typography>
           <Box
             component="form"
