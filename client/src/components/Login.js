@@ -95,12 +95,15 @@ const Login = () => {
             flexDirection: "column",
           }}
         >
-          <Typography variant="h4" sx={{ opacity: 0.9, color: "#5862F5" }}>
+          <Typography
+            variant="h4"
+            sx={{ opacity: 0.9, color: "#5862F5", fontWeight: "bold" }}
+          >
             Welcome Back!
           </Typography>
           <Typography
             variant="subtitle1"
-            sx={{ opacity: 0.6, color: "#5862F5" }}
+            sx={{ opacity: 0.5, color: "#5862F5", fontWeight: "bold" }}
           >
             Login to continue where you left off
           </Typography>
@@ -177,6 +180,7 @@ const Login = () => {
               sx={{
                 backgroundColor: "#5862F5",
                 color: "white",
+                fontWeight: "bold",
                 marginTop: 2,
                 "&:hover": {
                   backgroundColor: "#4B4DF7",

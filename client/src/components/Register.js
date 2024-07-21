@@ -104,12 +104,15 @@ const Register = () => {
             flexDirection: "column",
           }}
         >
-          <Typography variant="h4" sx={{ opacity: 0.9, color: "#5862F5" }}>
+          <Typography
+            variant="h4"
+            sx={{ opacity: 0.9, color: "#5862F5", fontWeight: "bold" }}
+          >
             Join Us!
           </Typography>
           <Typography
             variant="subtitle1"
-            sx={{ opacity: 0.6, color: "#5862F5" }}
+            sx={{ opacity: 0.6, color: "#5862F5", fontWeight: "bold" }}
           >
             Please fill in the form to create an account
           </Typography>
@@ -215,6 +218,7 @@ const Register = () => {
                 backgroundColor: "#5862F5",
                 color: "white",
                 marginTop: 2,
+                fontWeight: "bold",
                 "&:hover": {
                   backgroundColor: "#4B4DF7",
                 },
