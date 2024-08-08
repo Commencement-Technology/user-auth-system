@@ -9,50 +9,30 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import keyImage from "../assets/login_image.jpg";
 
+const { login, getUser } = authService;
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let isValid = true;
-
-    if (email === "") {
-      setEmailError(true);
-      isValid = false;
-    } else {
-      setEmailError(false);
-    }
-
-    if (password === "") {
-      setPasswordError(true);
-      isValid = false;
-    } else {
-      setPasswordError(false);
-    }
-
-    if (!isValid) {
-      setError("Both email and password are required");
-      return;
-    } else {
-      setError("");
-    }
-
     try {
-      const response = await authService.login(email, password);
+      const response = await login(email, password);
       const token = response.token;
       Cookies.set("authToken", token);
-      const userResponse = await authService.getUser(token);
+      const userResponse = await getUser(token);
       const user = userResponse.user;
       Cookies.set("user", JSON.stringify(user));
       navigate("/welcome");
     } catch (err) {
-      setError("Invalid credentials");
+      if (err.errors) {
+        const serverErrors = err.errors.map((error) => error.msg).join(", ");
+        setError(serverErrors);
+      }
     }
   };
 
@@ -124,12 +104,9 @@ const Login = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                setEmailError(false);
                 setError("");
               }}
               margin="normal"
-              error={emailError}
-              helperText={emailError ? "Email is required" : ""}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
@@ -153,12 +130,9 @@ const Login = () => {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                setPasswordError(false);
                 setError("");
               }}
               margin="normal"
-              error={passwordError}
-              helperText={passwordError ? "Password is required" : ""}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {

@@ -6,12 +6,9 @@ const User = require("../models/User");
 
 async function Login(req, res) {
   try {
-    await check("email", "Please include a valid email").isEmail().run(req);
-    await check("password", "Password is required").exists().run(req);
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
     const { email, password } = req.body;
@@ -45,21 +42,21 @@ async function Login(req, res) {
     );
   } catch (err) {
     console.log(err);
-    res.status(400).json({ success: false });
+    res.status(400).json({ success: false, msg: err });
   }
 }
 
 async function Register(req, res) {
   try {
-    await check("username", "Username is required").not().isEmpty().run(req);
+    /*   await check("username", "Username is required").not().isEmpty().run(req);
     await check("email", "Please include a valid email").isEmail().run(req);
     await check("password", "Password must be 6 or more characters")
       .isLength({ min: 6 })
-      .run(req);
+      .run(req); */
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
     const { username, email, password } = req.body;
@@ -92,8 +89,7 @@ async function Register(req, res) {
       }
     );
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ success: false });
+    res.status(400).json({ success: false, msg: err });
   }
 }
 
@@ -105,7 +101,6 @@ async function GetUser(req, res) {
       success: true,
     });
   } catch (err) {
-    console.error(err.message);
     res.status(500).json({ msg: "SERVER ERROR" });
   }
 }

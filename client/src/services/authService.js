@@ -10,7 +10,8 @@ const login = async (email, password) => {
   });
 
   if (!response.ok) {
-    throw new Error("Login failed");
+    const errorData = await response.json();
+    throw errorData;
   }
 
   return await response.json();
@@ -26,7 +27,8 @@ const register = async (username, email, password) => {
   });
 
   if (!response.ok) {
-    throw new Error("Registration failed");
+    const errorData = await response.json();
+    throw errorData;
   }
 
   return await response.json();

@@ -14,43 +14,10 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [usernameError, setUsernameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    let isValid = true;
-
-    if (username === "") {
-      setUsernameError(true);
-      isValid = false;
-    } else {
-      setUsernameError(false);
-    }
-
-    if (email === "") {
-      setEmailError(true);
-      isValid = false;
-    } else {
-      setEmailError(false);
-    }
-
-    if (password === "") {
-      setPasswordError(true);
-      isValid = false;
-    } else {
-      setPasswordError(false);
-    }
-
-    if (!isValid) {
-      setError("All fields are required");
-      return;
-    } else {
-      setError("");
-    }
 
     try {
       const response = await authService.register(username, email, password);
@@ -61,7 +28,12 @@ const Register = () => {
       Cookies.set("user", JSON.stringify(user));
       navigate("/login");
     } catch (err) {
-      setError("Error during registration");
+      if (err.errors) {
+        const serverErrors = err.errors.map((error) => error.msg).join(", ");
+        setError(serverErrors);
+      } else {
+        setError("Error during registration");
+      }
     }
   };
 
@@ -133,12 +105,9 @@ const Register = () => {
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value);
-                setUsernameError(false);
                 setError("");
               }}
               margin="normal"
-              error={usernameError}
-              helperText={usernameError ? "Name is required" : ""}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
@@ -161,12 +130,9 @@ const Register = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                setEmailError(false);
                 setError("");
               }}
               margin="normal"
-              error={emailError}
-              helperText={emailError ? "Email is required" : ""}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
@@ -190,12 +156,9 @@ const Register = () => {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                setPasswordError(false);
                 setError("");
               }}
               margin="normal"
-              error={passwordError}
-              helperText={passwordError ? "Password is required" : ""}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
