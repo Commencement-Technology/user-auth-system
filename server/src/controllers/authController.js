@@ -48,12 +48,6 @@ async function Login(req, res) {
 
 async function Register(req, res) {
   try {
-    /*   await check("username", "Username is required").not().isEmpty().run(req);
-    await check("email", "Please include a valid email").isEmail().run(req);
-    await check("password", "Password must be 6 or more characters")
-      .isLength({ min: 6 })
-      .run(req); */
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, errors: errors.array() });
