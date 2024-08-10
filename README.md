@@ -19,6 +19,7 @@
 - ***Express.js:*** Web framework for Node.js.
 - ***MongoDB:*** NoSQL database for storing user data.
 - ***Mongoose:*** ODM for MongoDB.
+- ***express-validator:*** Server side validation for input fields
 - ***Bcrypt:*** Library for hashing passwords.
 - ***JSON Web Tokens (JWT):*** Standard for creating secure access tokens.
 - ***React.js:*** Frontend library for building user interfaces.
