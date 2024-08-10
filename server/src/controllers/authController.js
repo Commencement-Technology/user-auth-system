@@ -16,7 +16,7 @@ async function Login(req, res) {
     let user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(400).json({
-        msg: "invalid credentials",
+        msg: "Invalid credentials",
         success: false,
       });
     }
@@ -24,7 +24,7 @@ async function Login(req, res) {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
-        msg: "invalid credentials",
+        msg: "Invalid credentials",
         success: false,
       });
     }
@@ -37,6 +37,7 @@ async function Login(req, res) {
         if (err) throw err;
         res.status(200).json({
           token,
+          user,
         });
       }
     );
@@ -58,7 +59,7 @@ async function Register(req, res) {
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
-        msg: "user already exists",
+        msg: "User already exists",
         success: false,
       });
     }
@@ -79,6 +80,7 @@ async function Register(req, res) {
         if (err) throw err;
         res.status(200).json({
           token,
+          user,
         });
       }
     );
